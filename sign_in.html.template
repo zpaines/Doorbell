@@ -12,8 +12,8 @@
 <script> 
 let open_door = confirm("Are you sure you want to open the door?")
 if (open_door) {
-	var url = "/cgi-bin/post_test.py";
-	var params = "name=zach&key=12345";
+	var url = "{{post_url}}";
+	var params = "{{params}}";
 	var xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
 

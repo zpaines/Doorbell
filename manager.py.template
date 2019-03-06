@@ -1,14 +1,13 @@
 #!/usr/bin/python3.5
-#on my machine this lives at /usr/lib/cgi-bin/
 import cgi
 import cgitb
 import datetime
-cgitb.enable(display=0, logdir="/var/log/post_test")
+cgitb.enable(display=0, logdir="/var/log/post_data")
 
 pw_list = {}
-#Insert user key pairs here
+{{key_list}}
 
-with open("/var/log/post_data", 'a') as logfile:
+with open("/var/log/doorbell", 'a') as logfile:
     print("Content-Type: text/html")    # HTML is following
     print()                             # blank line, end of headers
     form = cgi.FieldStorage()
@@ -19,5 +18,17 @@ with open("/var/log/post_data", 'a') as logfile:
     if form['key'].value != pw_list[name]:
         logfile.write("Invalid key for user %s" % name)
         raise RuntimeError("Invalid key for user %s" % name)
+    import time
+    import RPi.GPIO as GPIO
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BCM)
+    #This pin controls the buzzer relay
+    GPIO.setup(21, GPIO.OUT)
+    #This pin lights up an LED so you can see from the apartment when the door is opened
+    GPIO.setup(26, GPIO.OUT)
+    GPIO.output(21, GPIO.HIGH)
+    GPIO.output(26, GPIO.HIGH)
     logfile.write("Opened door at %s for user %s\n" % (datetime.datetime.now(), name))
-
+    time.sleep(3)
+    GPIO.output(21, GPIO.LOW)
+    GPIO.output(26, GPIO.LOW)

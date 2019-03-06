@@ -1,0 +1,31 @@
+<!--On my machine this lives at /var/www/html/-->
+
+<HTML>
+
+<HEAD>
+
+<TITLE>Welcome!</TITLE>
+
+</HEAD>
+
+<BODY>
+<script> 
+let open_door = confirm("Are you sure you want to open the door?")
+if (open_door) {
+	var url = "/cgi-bin/post_test.py";
+	var params = "name=zach&key=12345";
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+
+	//Send the proper header information along with the request
+	xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+	xhr.send(params);
+
+}
+</script>
+
+
+</BODY>
+
+</HTML>
